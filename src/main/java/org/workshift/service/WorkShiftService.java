@@ -2,7 +2,6 @@ package org.workshift.service;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.workshift.model.*;
@@ -15,12 +14,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
-
-import static java.util.stream.Collectors.groupingBy;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
 @RequiredArgsConstructor
@@ -125,11 +120,10 @@ public class WorkShiftService {
     }
 
     private String validateAddUserToShiftCases(List<Workshift> workshiftList, ShiftRequest request){
-         boolean isUserToBeAddedInShop = true;
          String description = "true";
        // Map<String,List<Workshift>> workshiftByShopIdMap = workshiftList.stream().collect(groupingBy(Workshift::getShopId));
         List<Workshift> shiftListOfSameShop = workshiftList.stream().
-                filter(work ->  work.getShopId()!=null && work.getShopId().equalsIgnoreCase(request.getShopId())).collect(Collectors.toList());
+                filter(work ->  work.getShopId()!=null && work.getShopId().equalsIgnoreCase(request.getShopId())).toList();
 
         LocalDateTime startTime = LocalDateTime.now();
         if(request.getStartTime()!=null){
@@ -177,7 +171,7 @@ public class WorkShiftService {
         List<Workshift> shiftResultForOtherShops = workshiftList.stream()
                 .filter(work -> work.getEndTime()!=null)
                 .filter(work -> requestStartTime.isBefore(work.getEndTime()))
-                .collect(Collectors.toList());
+                .toList();
       if(!CollectionUtils.isEmpty(shiftResultForOtherShops)){
          // isUserToBeAddedInShop = false;
           description = "User cannot work in multiple shop at the same time";

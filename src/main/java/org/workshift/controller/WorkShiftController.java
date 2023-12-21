@@ -28,7 +28,7 @@ public class WorkShiftController {
     }
 
     @PostMapping("/add-user-shop")
-    public String addUserToShop(@RequestBody ShopRequest shop) throws Exception {
+    public String addUserToShop(@RequestBody ShopRequest shop) {
         return workShiftService.addUserToShop(shop);
     }
 
